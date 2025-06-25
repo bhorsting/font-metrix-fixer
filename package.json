@@ -1,0 +1,94 @@
+{
+  "name": "font-fixer",
+  "version": "1.0.0",
+  "description": "A cross-platform app to fix font ascender/descender values by copying from OS/2 to hhea tables",
+  "main": "main.js",
+  "homepage": "https://github.com/yourusername/font-fixer",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --mac --win --linux",
+    "dist": "electron-builder --publish=never"
+  },
+  "build": {
+    "appId": "com.fontfixer.app",
+    "productName": "Font Fixer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Utility",
+      "maintainer": "Font Fixer <font-fixer@example.com>"
+    }
+  },
+  "keywords": [
+    "font",
+    "typography",
+    "opentype",
+    "ttf",
+    "otf"
+  ],
+  "author": {
+    "name": "Font Fixer",
+    "email": "font-fixer@example.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "opentype.js": "^1.3.4"
+  }
+}

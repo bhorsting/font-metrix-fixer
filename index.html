@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=600, initial-scale=1.0" />
+    <title>Font Fixer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f8fa;
+        margin: 0;
+      }
+      .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px #0001;
+        padding: 32px;
+        text-align: center;
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 2em;
+      }
+      #dropzone {
+        border: 2px dashed #8884;
+        border-radius: 8px;
+        padding: 40px 0;
+        margin: 24px 0;
+        color: #888;
+        font-size: 1.1em;
+        background: #fafbfc;
+        transition: border-color 0.2s;
+      }
+      #dropzone.dragover {
+        border-color: #4a90e2;
+        color: #4a90e2;
+      }
+      .btn {
+        background: #4a90e2;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 24px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      .btn:active {
+        background: #357ab8;
+      }
+      #status {
+        margin-top: 20px;
+        min-height: 24px;
+        font-size: 1em;
+      }
+      #status.success {
+        color: green;
+      }
+      #status.error {
+        color: red;
+      }
+      #status.processing {
+        color: #4a90e2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Font Fixer</h1>
+      <div>Copy ascender/descender from OS/2 to hhea table</div>
+      <div id="dropzone">
+        Drop a font file here or
+        <button class="btn" id="browseBtn">Browse</button>
+      </div>
+      <div id="status">Ready</div>
+    </div>
+    <script>
+      const dropzone = document.getElementById("dropzone");
+      const browseBtn = document.getElementById("browseBtn");
+      const status = document.getElementById("status");
+      let currentFilePath = null;
+
+      function setStatus(msg, type) {
+        status.textContent = msg;
+        status.className = type ? type : "";
+        console.log("Status:", msg, type);
+      }
+
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+      dropzone.addEventListener("dragleave", (e) => {
+        dropzone.classList.remove("dragover");
+      });
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("dragover");
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+
+      browseBtn.addEventListener("click", async () => {
+        try {
+          const filePath = await window.fontAPI.openFileDialog();
+          if (filePath) {
+            handleFilePath(filePath);
+          }
+        } catch (e) {
+          console.error("Error opening file dialog:", e);
+          setStatus("Error opening file dialog", "error");
+        }
+      });
+
+      function handleFile(file) {
+        console.log("File selected:", file.name);
+        console.log("File path:", file.path);
+
+        // Check if it's a font file by extension
+        const fileName = file.name.toLowerCase();
+        if (!fileName.endsWith(".ttf") && !fileName.endsWith(".otf")) {
+          setStatus("Please select a .ttf or .otf font file.", "error");
+          return;
+        }
+
+        if (file.path) {
+          handleFilePath(file.path);
+        } else {
+          setStatus("Error: Could not get file path", "error");
+        }
+      }
+
+      function handleFilePath(filePath) {
+        console.log("Processing file path:", filePath);
+
+        // Check if it's a font file by extension
+        const fileName = filePath.toLowerCase();
+        if (!fileName.endsWith(".ttf") && !fileName.endsWith(".otf")) {
+          setStatus("Please select a .ttf or .otf font file.", "error");
+          return;
+        }
+
+        currentFilePath = filePath;
+        const fileNameOnly = filePath.split("/").pop().split("\\").pop(); // Get just the filename
+        setStatus("Loaded: " + fileNameOnly);
+        processFont(currentFilePath);
+      }
+
+      async function processFont(filePath) {
+        setStatus("Processing font...", "processing");
+        console.log("Starting font processing for:", filePath);
+
+        try {
+          const result = await window.fontAPI.processFont(filePath);
+          console.log("Processing result:", result);
+
+          if (result.success) {
+            setStatus(result.message, "success");
+          } else {
+            setStatus("Error: " + result.message, "error");
+          }
+        } catch (e) {
+          console.error("Processing error:", e);
+          setStatus("Error: " + e.message, "error");
+        }
+      }
+    </script>
+  </body>
+</html>
