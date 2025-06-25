@@ -15,7 +15,7 @@ Font Fixer is a cross-platform desktop app that repairs font files by synchroniz
 ## Installation
 
 ### Pre-built Binaries
-Download the latest release for your platform from the [Releases](https://github.com/yourusername/font-fixer/releases) page:
+Download the latest release for your platform from the [Releases](https://github.com/bhorsting/font-fixer/releases) page:
 - **Windows:** `Font Fixer Setup.exe` (installer) or `Font Fixer.exe` (portable)
 - **macOS:** `Font Fixer-x.x.x.dmg`
 - **Linux:** `Font Fixer-x.x.x.AppImage` (portable) or `font-fixer_x.x.x_amd64.deb`
@@ -100,4 +100,15 @@ MIT
 ---
 
 ## Contact
-For questions or support, open an issue on GitHub or email: font-fixer@example.com
+For questions or support, open an issue on GitHub
+
+## What's New
+- Initial release of Font Fixer
+- Cross-platform support (Windows, macOS, Linux)
+- Fixes font ascender/descender values by copying from OS/2 to hhea tables
+- Automatic backup of original fonts
+
+## Downloads
+- **Windows:** Use "Font Fixer Setup 1.0.0.exe" for installation or "Font Fixer 1.0.0.exe" for portable use
+- **macOS:** Use "Font Fixer-1.0.0.dmg" for Intel Macs or "Font Fixer-1.0.0-arm64.dmg" for Apple Silicon
+- **Linux:** Use "Font Fixer-1.0.0.AppImage" for most distributions or "font-fixer_1.0.0_amd64.deb" for Ubuntu/Debian
